@@ -1,0 +1,9 @@
+streamlit
+ollama
+requests
+pyautogui
+pillow
+mss
+fastapi
+uvicorn
+agent
