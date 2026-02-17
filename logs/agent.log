@@ -1,0 +1,87 @@
+INFO:root:USER: take a screenshot after opening google.com
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 404 Not Found"
+INFO:root:USER: open google.com
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 404 Not Found"
+INFO:root:USER: open google.com
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://www.google.com"
+  }
+}
+INFO:root:USER: open google.com and take a screenshot
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://www.google.com"
+  }
+}
+INFO:root:USER: write a code of binary search in java
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "none",
+  "message": "```java\npublic int binarySearch(int[] arr, int target) {\n    int left = 0;\n    int right = arr.length - 1;\n\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n\n        if (arr[mid] == target) {\n            return mid;\n        } else if (arr[mid] < target) {\n            left = mid + 1;\n        } else {\n            right = mid - 1;\n        }\n    }\n\n    return -1;\n}\n```"
+}
+INFO:root:USER: i want to create a dummy text file and add palindrome strings to it
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "create_file",
+  "args": {
+    "filename": "palindromes.txt",
+    "content": "level\nmadam\nracecar\nreferfer\n"
+  }
+}
+INFO:root:USER: open google.com and search for facebook.com
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://www.google.com"
+  }
+}
+INFO:root:USER: take screenshot and save as image.jpeg
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "capture_screen",
+  "args": {}
+}
+INFO:root:USER: open github and take a screenshot
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://github.com"
+  }
+}
+INFO:root:USER: open github and take a screenshot
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://github.com"
+  }
+}
+INFO:root:USER: open google.com
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://www.google.com"
+  }
+}
+INFO:root:USER: open google.com on the browser
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "open_browser",
+  "args": {
+    "url": "https://www.google.com"
+  }
+}
+INFO:root:USER: take a screenshot
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+INFO:root:AI: {
+  "tool": "capture_screen",
+  "args": {}
+}
