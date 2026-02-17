@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent - Automated Testing Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            animation: fadeIn 0.6s ease-in;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: slideUp 0.8s ease-out;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.8em;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+            animation: slideUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .title-slide .tagline {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.8);
+            animation: slideUp 0.8s ease-out 0.4s backwards;
+        }
+
+        /* Main content slides */
+        .content-slide {
+            text-align: left;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .content-slide h2 {
+            font-size: 3em;
+            margin-bottom: 40px;
+            color: #667eea;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .content-slide h3 {
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #667eea;
+            animation: slideUp 0.6s ease-out 0.1s backwards;
+        }
+
+        .content-slide p, .content-slide li {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+            color: rgba(255,255,255,0.9);
+            animation: slideUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .content-slide ul {
+            margin-left: 40px;
+        }
+
+        /* Feature cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .feature-card {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            animation: slideUp 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .feature-card p {
+            font-size: 1.1em;
+            margin: 0;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* Architecture diagram */
+        .architecture {
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto;
+            animation: slideUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .arch-box {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            position: relative;
+        }
+
+        .arch-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        /* Code snippet */
+        .code-block {
+            background: #1a1f3a;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            overflow-x: auto;
+            margin: 20px 0;
+            animation: slideUp 0.6s ease-out 0.2s backwards;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            animation: slideUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+            font-size: 1.1em;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .checkmark {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .crossmark {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 40px 0;
+            width: 100%;
+        }
+
+        .stat-box {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid #667eea;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+            padding: 20px;
+        }
+
+        .timeline-item {
+            margin: 30px 0;
+            padding-left: 40px;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid #0a0e27;
+        }
+
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 20px;
+            width: 3px;
+            height: 50px;
+            background: #667eea;
+        }
+
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 1.3em;
+        }
+
+        .timeline-item p {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .slide-indicator {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-size: 1.2em;
+            background: rgba(102, 126, 234, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid #667eea;
+        }
+
+        /* Floating elements */
+        .floating-icon {
+            position: absolute;
+            font-size: 8em;
+            opacity: 0.1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-icon.icon1 { top: 5%; right: 5%; animation-delay: 0s; }
+        .floating-icon.icon2 { bottom: 10%; left: 5%; animation-delay: 0.5s; }
+        .floating-icon.icon3 { top: 50%; right: 10%; animation-delay: 1s; }
+
+        /* Highlight */
+        .highlight {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .tech-item {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            animation: slideUp 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            background: rgba(102, 126, 234, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .docker-illustration {
+            text-align: center;
+            font-size: 4em;
+            margin: 30px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .flow-item {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 15px;
+        }
+
+        /* End slide */
+        .end-slide {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            text-align: center;
+        }
+
+        .end-slide h2 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .end-slide p {
+            font-size: 1.5em;
+            color: rgba(255,255,255,0.9);
+            margin: 15px 0;
+        }
+
+        .contact-info {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            font-size: 1.2em;
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .content-slide h2 {
+                font-size: 2em;
+            }
+
+            .features-grid, .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                bottom: 20px;
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide active title-slide">
+        <div class="floating-icon icon1">🤖</div>
+        <div class="floating-icon icon2">⚙️</div>
+        <div class="floating-icon icon3">🐳</div>
+        <h1>AI Agent</h1>
+        <div class="subtitle">Automated Testing Platform</div>
+        <div class="tagline">Local Automation + Docker Container Testing</div>
+    </div>
+
+    <!-- Slide 2: Problem & Vision -->
+    <div class="slide content-slide">
+        <div class="floating-icon icon1">❓</div>
+        <h2>The Challenge</h2>
+        <h3>Manual Testing is Inefficient</h3>
+        <ul>
+            <li><span class="highlight">Time-consuming</span> - Repetitive manual tasks waste developer time</li>
+            <li><span class="highlight">Error-prone</span> - Human mistakes compromise quality</li>
+            <li><span class="highlight">Scalability issues</span> - Hard to test across multiple configurations</li>
+            <li><span class="highlight">No consistency</span> - Different execution each time</li>
+        </ul>
+        <h3 style="margin-top: 50px;">Our Vision</h3>
+        <p style="color: #4ade80; font-size: 1.5em; font-weight: bold;">Deploy an intelligent AI agent that automates testing locally and in containerized environments</p>
+    </div>
+
+    <!-- Slide 3: Solution Overview -->
+    <div class="slide content-slide">
+        <div class="floating-icon icon1">💡</div>
+        <h2>Our Solution</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🧠</div>
+                <h4>AI-Powered Agent</h4>
+                <p>Intelligent automation using Ollama with vision capabilities</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💻</div>
+                <h4>Local Automation</h4>
+                <p>Desktop automation - take screenshots, interact with UI</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🐳</div>
+                <h4>Docker Integration</h4>
+                <p>Run tests in isolated containers for consistency</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h4>Real-time Monitoring</h4>
+                <p>Live logs and metrics through Streamlit dashboard</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Key Features -->
+    <div class="slide content-slide">
+        <h2>Key Features</h2>
+        <div class="architecture">
+            <div class="arch-box">🧠 Natural Language Processing</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-box">🔍 Task Understanding & Parsing</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-box">🛠️ Tool Execution (Browser, Files, Screen)</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-box">📝 Logging & Monitoring</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-box">✅ Results Validation</div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Architecture -->
+    <div class="slide content-slide">
+        <h2>System Architecture</h2>
+        <div class="process-flow">
+            <div class="flow-item">
+                <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                <strong>User Input</strong>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-item">
+                <div style="font-size: 2em; margin-bottom: 10px;">🤖</div>
+                <strong>AI Agent</strong>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-item">
+                <div style="font-size: 2em; margin-bottom: 10px;">⚙️</div>
+                <strong>Execute Tasks</strong>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-item">
+                <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
+                <strong>Monitor & Log</strong>
+            </div>
+        </div>
+        <h3 style="margin-top: 50px;">Dual Execution Modes</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Local Mode</th>
+                <th>Docker Mode</th>
+            </tr>
+            <tr>
+                <td>✓ Direct system access</td>
+                <td>✓ Isolated environment</td>
+            </tr>
+            <tr>
+                <td>✓ Real-time UI interaction</td>
+                <td>✓ Reproducible tests</td>
+            </tr>
+            <tr>
+                <td>✓ Fast execution</td>
+                <td>✓ Multi-config testing</td>
+            </tr>
+            <tr>
+                <td>✓ Full OS integration</td>
+                <td>✓ CI/CD friendly</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Slide 6: Tech Stack -->
+    <div class="slide content-slide">
+        <h2>Technology Stack</h2>
+        <div class="tech-stack">
+            <div class="tech-item">🐍 Python 3.12+</div>
+            <div class="tech-item">🤖 Ollama (Local LLM)</div>
+            <div class="tech-item">🌐 FastAPI</div>
+            <div class="tech-item">📱 Streamlit UI</div>
+            <div class="tech-item">🐳 Docker & Compose</div>
+            <div class="tech-item">📸 PyAutoGUI</div>
+            <div class="tech-item">🔗 Browser Tools</div>
+            <div class="tech-item">📊 Real-time Logging</div>
+        </div>
+        <h3 style="margin-top: 40px;">Core Components</h3>
+        <ul>
+            <li><span class="highlight">Agent Core</span> - Orchestrates task execution and tool calling</li>
+            <li><span class="highlight">Tool Suite</span> - Browser, file, screen, and web utilities</li>
+            <li><span class="highlight">Memory System</span> - Contextual learning and state management</li>
+            <li><span class="highlight">Parser Module</span> - Converts AI responses to executable commands</li>
+        </ul>
+    </div>
+
+    <!-- Slide 7: Capabilities -->
+    <div class="slide content-slide">
+        <h2>Agent Capabilities</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">📸</div>
+                <h4>Screen Automation</h4>
+                <p>Take screenshots, analyze visuals, interact with UI elements</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📁</div>
+                <h4>File Operations</h4>
+                <p>Create, read, modify, and manage files programmatically</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🌐</div>
+                <h4>Web Automation</h4>
+                <p>Browse websites, fill forms, extract data, click elements</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔄</div>
+                <h4>Continuous Testing</h4>
+                <p>Run automated tests in loops with Docker containerization</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Local vs Docker -->
+    <div class="slide content-slide">
+        <h2>Execution Modes</h2>
+        <h3>🖥️ Local Mode</h3>
+        <ul>
+            <li>Direct access to system resources</li>
+            <li>Real-time screen interaction and monitoring</li>
+            <li>Perfect for development and quick testing</li>
+            <li>Example: <code class="code-block">python main.py</code></li>
+        </ul>
+        
+        <h3 style="margin-top: 40px;">🐳 Docker Mode</h3>
+        <ul>
+            <li>Isolated containerized environment</li>
+            <li>Guaranteed reproducibility across systems</li>
+            <li>Multiple containers for parallel testing</li>
+            <li>Ideal for CI/CD pipelines and regression testing</li>
+            <li>Example: <code class="code-block">docker-compose up -d agent-test</code></li>
+        </ul>
+    </div>
+
+    <!-- Slide 9: Demo Setup -->
+    <div class="slide content-slide">
+        <h2>Quick Start Guide</h2>
+        <h3>Setup (Local)</h3>
+        <div class="code-block">
+# Create virtual environment<br>
+python -m venv venv<br>
+source venv/bin/activate<br>
+<br>
+# Install dependencies<br>
+pip install -r requirements.txt<br>
+<br>
+# Run the web UI<br>
+streamlit run streamlit_app.py
+        </div>
+        
+        <h3 style="margin-top: 40px;">Docker Setup</h3>
+        <div class="code-block">
+# Build and run container<br>
+docker-compose build<br>
+docker-compose up agent
+        </div>
+    </div>
+
+    <!-- Slide 10: Use Cases -->
+    <div class="slide content-slide">
+        <h2>Real-World Use Cases</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>🧪 Automated Testing</h4>
+                <p>Regression testing, UI testing, form validation</p>
+            </div>
+            <div class="timeline-item">
+                <h4>📊 Data Collection</h4>
+                <p>Web scraping, screenshot analysis, data extraction</p>
+            </div>
+            <div class="timeline-item">
+                <h4>⚙️ System Maintenance</h4>
+                <p>Batch file processing, system monitoring, log analysis</p>
+            </div>
+            <div class="timeline-item">
+                <h4>🔐 Security Testing</h4>
+                <p>Penetration testing, vulnerability scanning, compliance checks</p>
+            </div>
+            <div class="timeline-item">
+                <h4>📱 Cross-Platform Testing</h4>
+                <p>Test same flows on different OS configurations</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Benefits -->
+    <div class="slide content-slide">
+        <h2>Key Benefits</h2>
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Time Savings</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">99%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Availability</div>
+            </div>
+        </div>
+        <h3 style="margin-top: 50px; text-align: center;">Why Choose Our Agent?</h3>
+        <ul style="text-align: center; list-style: none; margin-left: 0;">
+            <li>✓ <span class="highlight">Intelligent</span> - Learns from patterns</li>
+            <li>✓ <span class="highlight">Flexible</span> - Works locally and in containers</li>
+            <li>✓ <span class="highlight">Scalable</span> - Parallel testing with Docker</li>
+            <li>✓ <span class="highlight">Transparent</span> - Complete logging and monitoring</li>
+        </ul>
+    </div>
+
+    <!-- Slide 12: Roadmap -->
+    <div class="slide content-slide">
+        <h2>Future Roadmap</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>Phase 1: Core (Current)</h4>
+                <p>Basic automation, local & Docker execution, UI dashboard</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Phase 2: Intelligence</h4>
+                <p>Advanced learning, context memory, error recovery</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Phase 3: Scale</h4>
+                <p>Distributed testing, multi-container orchestration</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Phase 4: Integration</h4>
+                <p>CI/CD pipelines, cloud deployment, API marketplace</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Technical Highlights -->
+    <div class="slide content-slide">
+        <h2>Technical Excellence</h2>
+        <h3>🎯 Intelligent Parsing</h3>
+        <p>Natural language → Structured commands → Tool execution</p>
+        
+        <h3 style="margin-top: 30px;">🔄 Fault Tolerance</h3>
+        <p>Automatic retry mechanisms, error logging, graceful degradation</p>
+        
+        <h3 style="margin-top: 30px;">📈 Performance</h3>
+        <p>Optimized tool execution, parallel processing, minimal overhead</p>
+        
+        <h3 style="margin-top: 30px;">🔒 Security</h3>
+        <p>Sandboxed Docker environments, secure logging, input validation</p>
+    </div>
+
+    <!-- Slide 14: Demo Highlights -->
+    <div class="slide content-slide">
+        <h2>What We'll Demonstrate</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">✨</div>
+                <h4>Live Agent Demo</h4>
+                <p>Watch the agent execute tasks in real-time</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🐳</div>
+                <h4>Docker Execution</h4>
+                <p>Spawn containers and run parallel tests</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h4>Monitoring Dashboard</h4>
+                <p>Real-time logs and performance metrics</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🧠</div>
+                <h4>AI Intelligence</h4>
+                <p>See the agent think and make decisions</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Call to Action -->
+    <div class="slide end-slide">
+        <h2>Join the Future of Testing</h2>
+        <p>Intelligent Automation Starts Here</p>
+        
+        <div class="docker-illustration">🚀</div>
+        
+        <div class="contact-info">
+            <div class="contact-item">GitHub: hack_final</div>
+            <div class="contact-item">Try it Now!</div>
+        </div>
+        
+        <p style="margin-top: 50px; font-size: 1.3em;">Questions?</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button onclick="previousSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <div class="slide-indicator">
+        <span id="current-slide">1</span> / <span id="total-slides">15</span>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

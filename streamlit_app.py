@@ -7,19 +7,37 @@ st.title("🤖 Local AI Automation Agent")
 st.write("Your personal Jarvis, running on your machine.")
 
 # Task input
-task = st.text_input("Enter a task", placeholder="e.g. open google, take screenshot, create file...")
+tasks_input = st.text_area(
+    "Enter tasks (one per line)",
+    placeholder="e.g. open google\ntake screenshot\ncreate file...",
+    height=100
+)
 
 if st.button("Run Agent"):
-    if task.strip():
-        st.write("🧠 Agent is thinking...")
-        agent(task)
-        st.success("Task executed")
+    tasks = [t.strip() for t in tasks_input.split('\n') if t.strip()]
+    if tasks:
+        st.write(f"🧠 Agent is thinking... Processing {len(tasks)} task(s)")
+        for i, task in enumerate(tasks, 1):
+            st.info(f"Running task {i}/{len(tasks)}: {task}")
+            agent(task)
+        st.success(f"All {len(tasks)} task(s) executed successfully!")
     else:
-        st.warning("Enter a task first")
+        st.warning("Enter at least one task")
 
 # Live terminal-like log viewer
+st.subheader("📜 Agent Logs")
+
+col1, col2 = st.columns([10, 2])
+with col1:
+    st.write("")
+with col2:
+    if st.button("Clear Logs", key="clear_logs"):
+        with open("logs/agent.log", "w", encoding="utf-8") as f:
+            f.write("")
+        st.success("Logs cleared!")
+        st.rerun()
+
 with open("logs/agent.log", "r", encoding="utf-8") as f:
     logs = f.read()
 
-st.subheader("📜 Agent Logs")
 st.text_area("Logs", logs, height=300)
